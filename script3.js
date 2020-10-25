@@ -33,6 +33,9 @@ document.body.style.background="white";
 //Array of cat objects with name and image pairs
 var cats = [{name: "Socks", img: "socks.jpg"}, {name: "Boots", img :"boots.jpg"}, {name: "Carrot", img: "carrot.jpg"}, {name: "Tom", img: "tom.jpg"}, {name: "Garfield", img: "garfield.jpg"}];
 
+
+
+
 // Creating a list of cats from the cats array
 
 var catList = document.getElementById("catList");   // Create a ul element with an id called catList
@@ -40,14 +43,6 @@ cats.forEach(element => {
     var listItem = document.createElement("li");    // Create a <li> element
     listItem.innerHTML = element.name;              // Insert text to the li from the name of the cat object
     catList.appendChild(listItem);                  // Append <li> to <ul> with id="catList"
-
-    //Add event listeners that display a cats name and image
-    listItem.addEventListener("click", function(){
-        var clickedCatName = document.getElementById("selectedCatName");
-        clickedCatName.innerHTML = element.name;
-        var clickedCatImg = document.getElementById("selectedCatImg").src = "images/" + element.img;
-    });
-
 });
 
 
