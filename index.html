@@ -18,7 +18,7 @@
       </header>
     <section class="container">
       <div class="row">
-        <figure class="col-sm-6">
+        <figure class="col-sm-12">
           <p id="selectedCatName">
             <!--Populated by JavaScript-->
           </p>
@@ -27,8 +27,24 @@
           <p id ="clickCounterDisplay">
             <!--Populated by JavaScript-->  
           </p>
+          
         </figure>
+      </div>
+    </section>
+    <section class="container">
+      <button type="button" id="adminButton">Admin</button>
+      <div class = "row">
         
+        <form class="col-sm-12" id="admin">
+          <label class="col-sm-2" for="catName">Cat Name:</label>
+          <input class="col-sm-10" type="text" id="catName">
+          <label class="col-sm-2" for="catURL">URL:</label>
+          <input class="col-sm-10" type="url" id="catURL">
+          <label class="col-sm-2" for="noOfClicks">Clicks:</label>
+          <input class="col-sm-10" type="number" id="noOfClicks">
+          <button type="button" id="cancelButton">Cancel</button>
+          <button type="button" id="saveButton">Save</button>
+        </form>
       </div>
     </section>
     
