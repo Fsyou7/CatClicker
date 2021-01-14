@@ -5,12 +5,12 @@ cats= [{name: "Socks", img: "socks.jpg", clickCount: 0}, {name: "Boots", img :"b
 //Octopus functions
 octopus = {
     //Set currentCat
-    currentCat: cats[0],
+    currentCatIndex: 0,
     initApp: function (){
         //Tell the list view to render
         catListView.renderCatListView();
         //Tell the cat view to render the current cat initially
-        catView.renderCatView(octopus.currentCat);
+        catView.renderCatView(cats[octopus.currentCatIndex]);
         //Register clicks through bubbling
         document.body.addEventListener("click", function(){
             if(event.target.id == "selectedCatImg"){
@@ -20,8 +20,8 @@ octopus = {
                 console.log(event.target.class);
                 //When a list view item is clicked on change the current cat and re-render the cat view 
                 var catsIndex = document.getElementById(event.target.id);
-                console.log("catsIndex.id");
-                console.log(catsIndex.id);
+                // console.log("catsIndex.id");
+                // console.log(catsIndex.id);
                 octopus.updateCurrentCat(catsIndex.id);
             }
             else if (event.target.id == "adminButton"){
@@ -31,6 +31,7 @@ octopus = {
             }
             else if (event.target.id == "saveButton"){
                 catView.editCurrentCat();
+                catListView.updateCatListView();
             }
             else if (event.target.id == "cancelButton"){
                 catView.cancelCatEdits();
@@ -40,50 +41,51 @@ octopus = {
         octopus.toggleAdmin();
     }, 
     updateCurrentCat: function (catIndex){
-        console.log("catIndex");
-        console.log(catIndex);
-        currentCat={};
-        
-        octopus.currentCat = cats[catIndex];
+        // console.log("catIndex");
+        // console.log(catIndex);
+        octopus.currentCatIndex = catIndex;
         catView.updateAdminView();
-        catView.renderCatView(currentCat);
+        catView.renderCatView(cats[octopus.currentCatIndex]);
     },
     increaseCatClickCount: function () {
-        octopus.currentCat.clickCount++;
-        catView.updateCounterView(octopus.currentCat);
+        cats[octopus.currentCatIndex].clickCount++;
+        catView.updateCounterView(cats[octopus.currentCat]);
         catView.updateAdminView();
     },
     getCurrentCat: function (){
-        return octopus.currentCat;
+        // console.log("cats[octopus.currentCatIndex]");
+        // console.log(cats[octopus.currentCatIndex]);
+        return cats[octopus.currentCatIndex];
     },
     setCurrentCat: function(cat){
         let currentCat = cat;
-        octopus.currentCat = currentCat;
-        catView.renderCatView(octopus.currentCat);
+        cats[octopus.currentCatIndex] = currentCat;
+        catView.renderCatView(cats[octopus.currentCatIndex]);
         octopus.toggleAdmin();
     },
     toggleAdmin: function(){
         let isVisible = document.getElementById("admin");
-        console.log("toggleAdmin called")
-        console.log(isVisible.style);
+        // console.log("toggleAdmin called")
+        // console.log(isVisible.style);
         if(isVisible.style.visibility == "visible"){
             console.log("was visible");
             document.getElementById("admin").style.visibility = "hidden";
         } 
         else {
             let adminText = document.getElementById("admin");
-            console.log("was hidden");
+            // console.log("was hidden");
             document.getElementById("admin").style.visibility = "visible";
         }
     },
     setCatName: function(){
-        let currentCat = octopus.getCurrentCat();
-        let newName = document.getElementById("catName");
-        console.log("currentCat");
-        console.log(octopus.currentCat);
-        console.log("newName");
-        console.log(newName);
-        //currentCat.
+        let currentCatIndex = octopus.currentCatIndex;
+        let newName = document.getElementById("catName").value;
+        // console.log("cats[octopus.currentCatIndex]");
+        // console.log(cats[octopus.currentCatIndex]);
+        // console.log("newName");
+        // console.log(newName);
+        cats[currentCatIndex].name = newName;
+        catListView.updateCatListView();
     }
 }
 
@@ -98,6 +100,18 @@ catListView = {
             catListItem.class = "kitty";
             document.getElementById("catList").appendChild(catListItem);
         }
+    },
+    updateCatListView: function(){
+        var catList = document.getElementById("catList");   // Save the ul element with an id called catList to a variable   
+        // console.log("catList");
+        // console.log(catList);
+        var listItem = document.getElementById(octopus.currentCatIndex);
+        // console.log("listItem");
+        // console.log(listItem);
+        let newName = document.getElementById("catName").value;
+        listItem.innerHTML = newName;
+
+
     }
 }
 
@@ -108,8 +122,8 @@ catView = {
         var clickedCatCounter = document.getElementById("clickCounterDisplay");    // Save the p element with an id called selectedCatName to a variable
         //Populate variables with data
         clickedCatName.innerHTML = "";              // Clear the text of the element
-        console.log("octopus.getCurrentCat()");
-        console.log(octopus.getCurrentCat());
+        // console.log("octopus.getCurrentCat()");
+        // console.log(octopus.getCurrentCat());
         clickedCatName.innerHTML = octopus.getCurrentCat().name;        // Change the p element's HTML to the cat name
         clickedCatImg.src = "images/" + octopus.getCurrentCat().img;    // Change the img element's src to that of the cat image 
         clickedCatCounter.innerHTML = octopus.getCurrentCat().name + " has been clicked " + octopus.getCurrentCat().clickCount + " times";
@@ -140,14 +154,10 @@ catView = {
         newCat = {};
         newCat.name = catName;
         newCat.img = URL;
-        newCat.clickCount = catClicks;
-        console.log("newCat");
-        console.log(newCat);
-       octopus.setCurrentCat(newCat);
-        
-        // catName.value = octopus.getCurrentCat().name;
-        // URL.value = octopus.getCurrentCat().img;
-        // catClicks.value = octopus.getCurrentCat().clickCount;
+        newCat.clickCount = parseInt(catClicks, 10) ;
+        // console.log("newCat");
+        // console.log(newCat);
+        octopus.setCurrentCat(newCat);
     },
     cancelCatEdits: function(){
         octopus.toggleAdmin();
@@ -155,4 +165,3 @@ catView = {
 }
 
 octopus.initApp();
-octopus.setCatName();
